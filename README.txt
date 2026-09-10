@@ -1,8 +1,8 @@
 myShell - Programming Assignment 1
 
 1. Student/Group Information
-Name: Isaac Parada , (Add your names here)
-CWID: 885065110 , (Add your CWID here)
+Name: Isaac Parada , James Le ,
+CWID: 885065110 , 884746165 , 
 Course: CPSC 351
 Section: 3
 Assignment: Programming Assignment 1
