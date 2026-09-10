@@ -16,10 +16,10 @@ struct CommandData {
 };
 
 // Split the input into a command and up to three arguments.
-int parseCommand(char input[], char *argv[])
+int parseCommand(char* input[], char* argv[])
 {
     int argc = 0;
-    char *token = strtok(input, " \t\r\n");
+    char* token = strtok(input, " \t\r\n");
 
     while (token != nullptr)
     {
