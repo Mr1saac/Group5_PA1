@@ -16,16 +16,19 @@ struct CommandData {
 };
 
 // Split the input into a command and up to three arguments.
-int parseCommand(char* input, char* argv[]) {
+int parseCommand(char input[], char *argv[])
+{
     int argc = 0;
-    char* token = std::strtok(input, " \t\r\n");
+    char *token = strtok(input, " \t\r\n");
 
-    while (token != nullptr) {
-        if (argc == MAX_TOKENS) {
+    while (token != nullptr)
+    {
+        if (argc == MAX_TOKENS) { // If there are more than 4 tokens, return -1
             return -1;
         }
-        argv[argc++] = token;
-        token = std::strtok(nullptr, " \t\r\n");
+        argv[argc] = token;
+        argc++;
+        token = strtok(nullptr, " \t\r\n");
     }
 
     return argc;
