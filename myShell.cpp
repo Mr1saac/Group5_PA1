@@ -1,4 +1,5 @@
-// CPSC 351 - Programming Assignment 1: myShell
+// CPSC 351, Section 3 - Programming Assignment 1: myShell
+// Group 5: Isaac Parada, James Le, Eugene Kim, Luke Nguyen
 
 #include <windows.h>
 #include <cctype>

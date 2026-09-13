@@ -1,14 +1,20 @@
-Required Screenshots
+Group 5 - Screenshot Evidence
 
-Run myShell.exe on Windows. Keep the program prompt, entered command, and output
-visible in each screenshot. Save these images in this folder:
+Existing files and observed behavior:
+dir.png - Directory listing, followed by the myShell prompt.
+ping.png - ping 192.168.86.1, four replies, 0% packet loss, and the next prompt.
+echo_color.png - echo Hello World and color 0A, with a prompt after each command.
+invalid.png - Two unsupported-command errors and continued prompting.
+exit.png - exit and the closing message.
 
-Screenshot1_dir.png - Welcome message and the dir command output.
-Screenshot2_ping.png - ping 127.0.0.1 and its output.
-Screenshot3_echo_color.png - echo Hello World, followed by color 0A.
-Screenshot4_invalid.png - invalidCommand, the error, and the next prompt.
-Screenshot5_exit.png - exit and the closing message.
+Refresh these screenshots after compiling the latest myShell.cpp:
+1. dir.png: Show the program launch (.\myShell.exe), welcome message, dir output,
+   and the next ==> prompt in one readable image.
+2. invalid.png: Show hello123 and invalidCommand. The current version also prints
+   Supported commands: dir help vol path tasklist notepad echo color ping
+   after each unsupported-command error. Include that output and the next prompt.
 
-Update the main README with the screenshot files, actual Windows test results,
-compiler/version, section, group number, and contributions. Then zip the updated
-Group1_PA1 folder, using your assigned group number in the ZIP filename.
+Run the other tests again against the final build and replace any outdated
+images. Capture actual Windows output; preserve readable commands and prompts.
+After refreshing evidence, update README.txt to remove resolved refresh notes
+and record the compiler/version actually used. Zip the folder as Group5_PA1.zip.
