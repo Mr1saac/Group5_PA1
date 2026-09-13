@@ -9,6 +9,7 @@ Isaac Parada - 885065110
 James Le - 884746165
 Eugene Kim - 886836733
 Luke Nguyen - 84179630
+Hoang Nguyen - 885020313
 
 The code also credits Hoang Nguyen. Check whether he needs to be added to this
 group list before submitting.
