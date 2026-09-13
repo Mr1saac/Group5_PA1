@@ -1,8 +1,8 @@
 myShell - Programming Assignment 1
 
 1. Student/Group Information
-Name: Isaac Parada , James Le , Eugene Kim , 
-CWID: 885065110 , 884746165 , 886836733 , 
+Name: Isaac Parada , James Le , Eugene Kim , Luke Nguyen 
+CWID: 885065110 , 884746165 , 886836733 , 84179630
 Course: CPSC 351
 Section: 3
 Assignment: Programming Assignment 1
