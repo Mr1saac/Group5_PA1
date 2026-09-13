@@ -1,12 +1,13 @@
-# Group5_PA1
+# Group 5 - Programming Assignment 1
 
-CPSC 351, Section 3 - Programming Assignment 1.
+CPSC 351 - Section 3
 
-myShell reads a command, checks whether it is supported, and runs it in a Windows
-worker thread. The main thread waits before showing the next prompt.
+This program is a simple Windows shell that lets the user enter supported
+commands and runs each command using a worker thread.
 
-Build instructions, test results, and group contributions are in
-[README.txt](README.txt). The test screenshots are in [screenshots](screenshots/).
+The program supports commands such as dir, ping, echo, color, and tasklist.
 
-Before submitting, add the compiler version, check the group names, and update
-the screenshots after running the latest code.
+For more information about compiling, running, and testing the program,
+see README.txt.
+
+Screenshots of the program are included in the screenshots folder.
