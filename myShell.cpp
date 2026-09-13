@@ -8,32 +8,32 @@
 #include <cstring>
 #include <string>
 
-constexpr int MAX_TOKENS = 4;
-constexpr int INPUT_SIZE = 512;
+const int MAX_TOKENS = 4;
+const int INPUT_SIZE = 512;
 
-// Hoang Nguyen: whitelist of supported Windows commands.
-const char* const kSupportedCommands[] = {
+// Hoang Nguyen: list of commands our shell supports
+const char* supportedCommands[] = {
     "dir", "help", "vol", "path", "tasklist",
-    "notepad", "echo", "color", "ping"};
-const int kSupportedCommandCount =
-    sizeof(kSupportedCommands) / sizeof(kSupportedCommands[0]);
+    "notepad", "echo", "color", "ping"
+};
+
+const int commandCount = sizeof(supportedCommands) / sizeof(supportedCommands[0]);
 
 struct CommandData {
     int argc;
     char* argv[MAX_TOKENS];
 };
 
-// Split the input into a command and up to three arguments.
-int parseCommand(char* input, char* argv[])
-{
+// splits what the user typed into separate parts
+int parseCommand(char* input, char* argv[]) {
     int argc = 0;
     char* token = strtok(input, " \t\r\n");
 
-    while (token != nullptr)
-    {
-        if (argc == MAX_TOKENS) { // If there are more than 4 tokens, return -1
+    while (token != nullptr) {
+        if (argc >= MAX_TOKENS) {
             return -1;
         }
+
         argv[argc] = token;
         argc++;
         token = strtok(nullptr, " \t\r\n");
@@ -42,77 +42,84 @@ int parseCommand(char* input, char* argv[])
     return argc;
 }
 
-// Hoang Nguyen: checks whether the command is in the supported list.
+// Hoang Nguyen: checks if the command is allowed
 bool isSupportedCommand(const char* command) {
-    for (int i = 0; i < kSupportedCommandCount; ++i) {
-        if (std::strcmp(command, kSupportedCommands[i]) == 0) {
+    for (int i = 0; i < commandCount; i++) {
+        if (strcmp(command, supportedCommands[i]) == 0) {
             return true;
         }
     }
     return false;
 }
 
-// Hoang Nguyen: prints the list of supported commands on one line.
+// Hoang Nguyen: prints all supported commands
 void printSupportedCommands() {
-    std::printf("Supported commands:");
-    for (int i = 0; i < kSupportedCommandCount; ++i) {
-        std::printf(" %s", kSupportedCommands[i]);
+    printf("Supported commands:");
+
+    for (int i = 0; i < commandCount; i++) {
+        printf(" %s", supportedCommands[i]);
     }
-    std::printf("\n");
+
+    printf("\n");
 }
 
-bool containsShellOperators(const CommandData& command) {
-    for (int i = 1; i < command.argc; ++i) {
-        if (std::strpbrk(command.argv[i], "&|<>^%") != nullptr) {
+// checks for characters we do not want passed to the Windows shell
+bool hasShellCharacters(CommandData& command) {
+    for (int i = 1; i < command.argc; i++) {
+        if (strpbrk(command.argv[i], "&|<>^%") != nullptr) {
             return true;
         }
     }
     return false;
 }
 
-// Rebuild the parsed command and execute it in the worker thread.
-DWORD WINAPI commandThread(LPVOID parameter) {
-    const CommandData* command = static_cast<const CommandData*>(parameter);
-    std::string commandLine;
+// function that the thread runs
+DWORD WINAPI runCommand(LPVOID parameter) {
+    CommandData* command = (CommandData*)parameter;
+    std::string commandLine = "";
 
-    for (int i = 0; i < command->argc; ++i) {
-        if (i > 0) {
-            commandLine += ' ';
+    for (int i = 0; i < command->argc; i++) {
+        if (i != 0) {
+            commandLine += " ";
         }
         commandLine += command->argv[i];
     }
 
-    int result = std::system(commandLine.c_str());
+    int result = system(commandLine.c_str());
+
     if (result == -1) {
-        std::fprintf(stderr, "Error: could not execute the command.\n");
+        fprintf(stderr, "Error: could not execute the command.\n");
         return 1;
     }
-    return static_cast<DWORD>(result);
+
+    return (DWORD)result;
 }
 
 int main() {
     char input[INPUT_SIZE];
 
-    std::puts("Welcome to myShell!");
-    std::puts("Type a command, or enter exit/quit to close the shell.");
+    printf("Welcome to myShell!\n");
+    printf("Type a command, or enter exit/quit to close the shell.\n");
 
-    // Read and process commands until exit, quit, or end of input.
-    while (1) {
-        std::printf("==> ");
-        std::fflush(stdout);
+    while (true) {
+        printf("==> ");
+        fflush(stdout);
 
-        if (std::fgets(input, sizeof(input), stdin) == nullptr) {
-            std::putchar('\n');
+        if (fgets(input, sizeof(input), stdin) == nullptr) {
+            printf("\n");
             break;
         }
 
-        // Discard excess input so it does not become the next command.
-        if (std::strchr(input, '\n') == nullptr) {
-            int ch = std::getchar();
+        // if the line was too long, clear the rest of it
+        if (strchr(input, '\n') == nullptr) {
+            int ch = getchar();
+
             if (ch != '\n' && ch != EOF) {
-                while ((ch = std::getchar()) != '\n' && ch != EOF) {
+                while ((ch = getchar()) != '\n' && ch != EOF) {
+                    // just clearing the input buffer
                 }
-                std::fprintf(stderr, "Error: command line is too long.\n");
+
+                fprintf(stderr, "Error: command line is too long.\n");
                 continue;
             }
         }
@@ -123,49 +130,54 @@ int main() {
         if (command.argc == 0) {
             continue;
         }
+
         if (command.argc == -1) {
-            std::fprintf(stderr, "Error: use a command and at most three arguments.\n");
+            fprintf(stderr, "Error: use a command and at most three arguments.\n");
             continue;
         }
 
-        for (char* ch = command.argv[0]; *ch != '\0'; ++ch) {
-            *ch = static_cast<char>(std::tolower(static_cast<unsigned char>(*ch)));
+        // make the command lowercase so DIR and dir both work
+        for (char* ch = command.argv[0]; *ch != '\0'; ch++) {
+            *ch = (char)tolower((unsigned char)*ch);
         }
 
-        if (std::strcmp(command.argv[0], "exit") == 0 ||
-            std::strcmp(command.argv[0], "quit") == 0) {
+        if (strcmp(command.argv[0], "exit") == 0 ||
+            strcmp(command.argv[0], "quit") == 0) {
             break;
         }
-         // Hoang Nguyen: reject unsupported commands and return to the prompt.
+
         if (!isSupportedCommand(command.argv[0])) {
-            std::printf("Error: '%s' is not a supported command.\n", command.argv[0]);
+            printf("Error: '%s' is not a supported command.\n", command.argv[0]);
             printSupportedCommands();
             continue;
         }
-        if (containsShellOperators(command)) {
-            std::fprintf(stderr, "Error: shell-control characters are not supported.\n");
+
+        if (hasShellCharacters(command)) {
+            fprintf(stderr, "Error: shell-control characters are not supported.\n");
             continue;
         }
 
-        // Each valid command gets its own worker thread.
-        HANDLE thread = CreateThread(nullptr, 0, commandThread, &command, 0, nullptr);
+        // run the command using a Windows thread
+        HANDLE thread = CreateThread(nullptr, 0, runCommand, &command, 0, nullptr);
+
         if (thread == nullptr) {
-            std::fprintf(stderr, "Error: CreateThread failed (%lu).\n", GetLastError());
+            fprintf(stderr, "Error: CreateThread failed (%lu).\n", GetLastError());
             continue;
         }
 
-        // Wait before reusing the input buffer and command data.
+        // wait until the command is done before asking for another one
         if (WaitForSingleObject(thread, INFINITE) == WAIT_FAILED) {
-            std::fprintf(stderr, "Error: WaitForSingleObject failed (%lu).\n",
-                         GetLastError());
-            std::exit(EXIT_FAILURE);
+            fprintf(stderr, "Error: WaitForSingleObject failed (%lu).\n", GetLastError());
+            CloseHandle(thread);
+            return 1;
         }
+
         if (!CloseHandle(thread)) {
-            std::fprintf(stderr, "Error: CloseHandle failed (%lu).\n", GetLastError());
+            fprintf(stderr, "Error: CloseHandle failed (%lu).\n", GetLastError());
             return 1;
         }
     }
 
-    std::puts("Thanks for using myShell!");
+    printf("Thanks for using myShell!\n");
     return 0;
 }
