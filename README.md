@@ -1,13 +1,12 @@
 # Group5_PA1
 
-CPSC 351, Section 3 - Programming Assignment 1: myShell.
+CPSC 351, Section 3 - Programming Assignment 1.
 
-A Windows C++ shell that parses commands, validates them, and executes supported
-commands in worker threads created with `CreateThread()`.
+myShell reads a command, checks whether it is supported, and runs it in a Windows
+worker thread. The main thread waits before showing the next prompt.
 
-See [README.txt](README.txt) for build/run instructions, observed test results,
-and contributions. Test images are in [screenshots](screenshots/).
+Build instructions, test results, and group contributions are in
+[README.txt](README.txt). The test screenshots are in [screenshots](screenshots/).
 
-Before submitting: record the actual Windows compiler/version, confirm the
-contributor roster, and rebuild the final source to refresh the screenshot evidence.
-Submit the updated folder as **Group5_PA1.zip**.
+Before submitting, add the compiler version, check the group names, and update
+the screenshots after running the latest code.
