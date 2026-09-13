@@ -10,6 +10,13 @@
 constexpr int MAX_TOKENS = 4;
 constexpr int INPUT_SIZE = 512;
 
+// Hoang Nguyen: whitelist of supported Windows commands.
+const char* const kSupportedCommands[] = {
+    "dir", "help", "vol", "path", "tasklist",
+    "notepad", "echo", "color", "ping"};
+const int kSupportedCommandCount =
+    sizeof(kSupportedCommands) / sizeof(kSupportedCommands[0]);
+
 struct CommandData {
     int argc;
     char* argv[MAX_TOKENS];
@@ -34,18 +41,23 @@ int parseCommand(char* input, char* argv[])
     return argc;
 }
 
+// Hoang Nguyen: checks whether the command is in the supported list.
 bool isSupportedCommand(const char* command) {
-    const char* supported[] = {
-        "dir", "help", "vol", "path", "tasklist",
-        "notepad", "echo", "color", "ping"
-    };
-
-    for (const char* name : supported) {
-        if (std::strcmp(command, name) == 0) {
+    for (int i = 0; i < kSupportedCommandCount; ++i) {
+        if (std::strcmp(command, kSupportedCommands[i]) == 0) {
             return true;
         }
     }
     return false;
+}
+
+// Hoang Nguyen: prints the list of supported commands on one line.
+void printSupportedCommands() {
+    std::printf("Supported commands:");
+    for (int i = 0; i < kSupportedCommandCount; ++i) {
+        std::printf(" %s", kSupportedCommands[i]);
+    }
+    std::printf("\n");
 }
 
 bool containsShellOperators(const CommandData& command) {
@@ -123,9 +135,10 @@ int main() {
             std::strcmp(command.argv[0], "quit") == 0) {
             break;
         }
+         // Hoang Nguyen: reject unsupported commands and return to the prompt.
         if (!isSupportedCommand(command.argv[0])) {
-            std::fprintf(stderr, "Error: '%s' is not a supported command.\n",
-                         command.argv[0]);
+            std::printf("Error: '%s' is not a supported command.\n", command.argv[0]);
+            printSupportedCommands();
             continue;
         }
         if (containsShellOperators(command)) {
