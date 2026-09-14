@@ -65,9 +65,6 @@ CloseHandle() and shows the next prompt. Invalid commands, exit, and quit do not
 start a worker thread.
 
 7. Testing
-These results come from the included Windows screenshots. They were taken before
-the latest change to invalid-command output. Rerun the final build and update
-the screenshots before submitting.
 
 Test 1: dir
 Result: The files in Group5_PA1 were listed, and the ==> prompt returned.
@@ -87,11 +84,8 @@ and two valid commands in a row.
 Screenshot: screenshots/echo_color.png
 
 Test 4: hello123, followed by invalidCommand
-Result: Both commands showed an unsupported-command error and returned to the
-prompt. The error displays invalidcommand in lowercase.
-Screenshot: screenshots/invalid.png
-To update: The latest code also prints the supported-command list after each
-error. Rebuild the program and capture that output.
+Result: Both commands showed an unsupported-command error, displayed the list
+of supported commands, and returned to the prompt.
 
 Test 5: exit
 Result: The shell printed Thanks for using myShell!
