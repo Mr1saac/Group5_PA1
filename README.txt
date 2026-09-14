@@ -111,8 +111,5 @@ James Le (lejames11367): Added the test screenshots, including echo and color.
 Eugene Kim (Kimchyboy): Updated parseCommand(), formatting, and group information.
 Luke Nguyen (lukeng-29): Fixed the input parameter type in parseCommand() and
 updated the group information.
-
 Hoang Nguyen (Hoang842): Added the shared command list, updated command
 validation, and added the list of supported commands after an invalid command.
-His name is credited in the code but is not in the group list above; confirm
-how he should be listed.
