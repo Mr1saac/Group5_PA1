@@ -11,9 +11,6 @@ Eugene Kim - 886836733
 Luke Nguyen - 84179630
 Hoang Nguyen - 885020313
 
-The code also credits Hoang Nguyen. Check whether he needs to be added to this
-group list before submitting.
-
 2. Files Included
 myShell.cpp - Contains the shell program.
 README.txt - Explains how to build, run, and test the program.
